@@ -1,0 +1,137 @@
+-- What are all the types of pokemon that a pokemon can have?
+select name from types;
+-- Normal
+-- Water
+-- Grass
+-- Rock
+-- Fire
+-- Ground
+-- Poison
+-- Bug
+-- Electric
+-- Dragon
+-- Steel
+-- Dark
+-- Fighting
+-- Psychic
+-- Ghost
+-- Fairy
+-- Ice
+-- Flying
+
+-- What is the name of the pokemon with id 45?
+select name from pokemons where id = 45;
+-- Eevee
+
+-- How many pokemon are there?
+select count(*) as "count" from pokemons;
+-- 656
+
+-- How many types are there?
+select count(*) as "count" from types;
+-- 18
+
+-- How many pokemon have a secondary type?
+select count(*) as "count" from pokemons where secondary_type is not null;
+-- 316
+
+-- What is each pokemon's primary type?
+select p.name, t.name from pokemons p join types t on p.primary_type= t.id;
+-- Smeargle	Normal
+-- Wailord	Water
+-- Vileplume	Grass
+-- Armaldo	Rock
+-- Cradily	Rock
+-- Carvanha	Water
+-- Numel	Fire
+-- Sandslash	Ground
+-- Ninetales	Fire
+-- Weepinbell	Grass
+-- Gloom	Grass
+-- etc...
+
+-- What is Rufflet's secondary type?
+select p.name, t.name from pokemons p join types t
+    on p.secondary_type = t.id where p.name = 'Rufflet';
+-- Rufflet	Flying
+
+-- What are the names of the pokemon that belong to the trainer with trainerID 303?
+SELECT t.trainerID, p.name
+FROM pokemon_trainer t
+JOIN pokemons p
+ON t.pokemon_id = p.id
+WHERE trainerID = 303;
+-- 303	Wailord
+-- 303	Vileplume
+
+-- How many pokemon have a secondary type Poison
+select count(*) as "count"
+from pokemons
+where secondary_type = (select id from types where name = 'Poison');
+-- 31
+
+-- What are all the primary types and how many pokemon have that type?
+select count(*) as "count", t.name
+from types t
+join pokemons p
+on t.id = p.primary_type
+group by t.name;
+-- 61	Bug
+-- 24	Dark
+-- 22	Dragon
+-- 35	Electric
+-- 14	Fairy
+-- 25	Fighting
+-- 38	Fire
+-- 1	Flying
+-- 19	Ghost
+-- 59	Grass
+-- 29	Ground
+-- 22	Ice
+-- 90	Normal
+-- 27	Poison
+-- 38	Psychic
+-- 38	Rock
+-- 19	Steel
+-- 95	Water
+
+-- How many pokemon at level 100 does each trainer with at least one level 100 pokemone have? (Hint: your query should not display a trainer
+select count(*) as "count", p.trainerID
+from pokemon_trainer p
+where p.pokelevel = 100
+group by p.trainerID;
+-- 6	1258
+-- 6	1259
+-- 6	1260
+-- 6	1261
+-- 6	1262
+-- 6	1263
+-- 6	1264
+-- 6	1265
+-- 6	1266
+-- 6	1267
+-- etc...
+
+-- How many pokemon only belong to one trainer and no other?
+select count(trainerID) as "count", pt.pokemon_id
+from pokemon_trainer pt
+join pokemons p
+on p.id = pt.pokemon_id
+group by pt.pokemon_id
+having count(trainerID) = 1;
+-- 1	592
+-- 1	593
+-- 1	606
+-- 1	644
+-- 1	646
+-- 1	647
+-- 1	649
+-- 1	650
+-- 1	651
+-- 1	652
+-- 1	653
+-- 1	655
+-- 1	656
+
+
+
